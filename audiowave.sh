@@ -122,7 +122,6 @@ if [ $WAVE_Y -eq -1 ]
 then
     WAVE_Y="$((($HEIGHT-$WAVE_HEIGHT)/2))"
 fi
-echo $TEXT_X $TEXT_Y
 if [ $TEXT_X -eq -1 ]
 then
     TEXT_X=20
@@ -131,7 +130,6 @@ if [ $TEXT_Y -eq -1 ]
 then
     TEXT_Y="$(($HEIGHT-100))"
 fi
-echo $TEXT_X $TEXT_Y
 if [ $DIST_T -eq -1 ]
 then
     DIST_T=50
@@ -140,7 +138,13 @@ TEXT_Y2="$(($TEXT_Y + $DIST_T))"
 if [ ${#AUDIO} -eq 0 ] || [ ! -f $AUDIO ] 
 then
     echo $AUDIO
-    echo "Usage ./audiowave.sh [-t title] [-s subtitle] [-b background_image] -a audio [-w width] [-h height] [-c color]"
+    echo "Usage ./audiowave.sh [-t title] [-s subtitle] [-b background_image]"
+    echo "                     [-m mode] [-w width] [-h height] -a audio"
+    echo "                     [-ww wave_width] [-wh wave_height] [-wc wave_color]"
+    echo "                     [-wx wave_x_position] [-wy wave_y_position]"
+    echo "                     [-tx text_x_position] [-ty text_y_position]"
+    echo "                     [-tc text_color] [-dt distance_title_subtitle]"
+    echo ""
     echo "-t set the title of the video. It's optional"
     echo "-s set the subtitle of the video. It's optional"
     echo "-b set the background_image. It's optional"
@@ -148,15 +152,17 @@ then
     echo "-m set the mode. Default is line. Possible modes: point, line, p2p, cline"
     echo "-w set the width of the video. It's optional, default width is 640 px"
     echo "-h set the height of the video. It's optional, default height is 480 px"
+    echo ""
     echo "-ww set the width of the wave. It's optional, default width is 640 px"
     echo "-wh set the height of the wave It's optional, default height is 480 px"
     echo "-wc set the color of wave. It's optional, default color is yellow"
     echo "-wx set the x position of wave. It's optional, default x position is in the middle"
     echo "-wy set the y position of wave. It's optional, default y position is in the middle"
+    echo ""
     echo "-tc set the color of title and subtitle. It's optional, default color is yellow"
     echo "-tx set the x position of text. It's optional, default x position is 20 px"
     echo "-ty set the y position of text. It's optional, default y position is 100 px from bottom"
-    echo "-dt set the distance between tittle and subttile, default distance is 50px"
+    echo "-dt set the distance between tittle and subtitle, default distance is 50px"
     exit 126
 fi
 
