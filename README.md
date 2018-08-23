@@ -4,11 +4,11 @@ Creates a video with an image and a wave
 
 ```
 Usage ./audiowave.sh [-t title] [-s subtitle] [-b background_image]
-                        [-m mode] [-w width] [-h height] -a audio
-                        [-ww wave_width] [-wh wave_height] [-wc wave_color]
-                        [-wx wave_x_position] [-wy wave_y_position]
-                        [-tx text_x_position] [-ty text_y_position]
-                        [-tc text_color] [-dt distance_title_subtitle]
+                     [-m mode] [-w width] [-h height] -a audio
+                     [-ww wave_width] [-wh wave_height] [-wc wave_color]
+                     [-wx wave_x_position] [-wy wave_y_position]
+                     [-tx text_x_position] [-ty text_y_position]
+                     [-tc text_color] [-dt distance_title_subtitle]
 ```
 
 * -t set the title of the video. It's optional
