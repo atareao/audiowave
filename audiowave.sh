@@ -12,6 +12,7 @@ WAVE_Y=-1
 TEXT_COLOR="yellow"
 TEXT_X=-1
 TEXT_Y=-1
+DIST_T=-1
 AUDIO=""
 
 POSITIONAL=()
@@ -90,6 +91,11 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    -dt|--distance_texts)
+    DIST_T="$2"
+    shift # past argument
+    shift # past value
+    ;;
     -m|--mode)
     MODE="$2"
     shift # past argument
@@ -126,7 +132,11 @@ then
     TEXT_Y="$(($HEIGHT-100))"
 fi
 echo $TEXT_X $TEXT_Y
-TEXT_Y2="$(($TEXT_Y + 50))"
+if [ $DIST_T -eq -1 ]
+then
+    DIST_T=50
+fi
+TEXT_Y2="$(($TEXT_Y + $DIST_T))"
 if [ ${#AUDIO} -eq 0 ] || [ ! -f $AUDIO ] 
 then
     echo $AUDIO
@@ -146,6 +156,7 @@ then
     echo "-tc set the color of title and subtitle. It's optional, default color is yellow"
     echo "-tx set the x position of text. It's optional, default x position is 20 px"
     echo "-ty set the y position of text. It's optional, default y position is 100 px from bottom"
+    echo "-dt set the distance between tittle and subttile, default distance is 50px"
     exit 126
 fi
 
