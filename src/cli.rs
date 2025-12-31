@@ -1,0 +1,33 @@
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[command(author = "Lorenzo Carbonell <atareao.es>", version, about = "Generador de videos con waveform a partir de MP3")]
+pub struct Args {
+    /// Archivo MP3 de entrada
+    #[arg(short, long)]
+    pub input: String,
+
+    /// Nombre de la plantilla definida en el YAML
+    #[arg(short, long, default_value = "default")]
+    pub template: String,
+
+    /// Título del video (sobreescribe los metadatos o el YAML)
+    #[arg(short = 'm', long)]
+    pub title: Option<String>,
+
+    /// Subtítulo del video
+    #[arg(short, long)]
+    pub subtitle: Option<String>,
+
+    /// Archivo de salida (MP4)
+    #[arg(short, long, default_value = "output.mp4")]
+    pub output: String,
+
+    /// Archivo de configuración YAML
+    #[arg(short = 'c', long, default_value = "config.yml")]
+    pub config: String,
+
+    /// Modo de prueba: solo genera los primeros 5 segundos
+    #[arg(short, long)]
+    pub preview: bool,
+}
