@@ -5,11 +5,7 @@ pub mod text;
 pub mod template;
 pub mod config;
 pub mod style;
+pub mod metadata;
 
-// Re-exportar para facilitar el uso
-pub use background::BackgroundSettings;
 pub use config::Config;
-pub use template::Template;
-pub use text::TextSettings;
-pub use video::VideoSettings;
-pub use waveform::WaveformSettings;
+pub use metadata::AudioMetadata;
