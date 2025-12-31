@@ -1,9 +1,9 @@
 use super::template::Template;
 use directories::ProjectDirs;
+use log::debug;
 use serde::Deserialize;
 use std::collections::HashMap;
-use std::{env, path::PathBuf, fs};
-use log::debug;
+use std::{env, fs, path::PathBuf};
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -36,6 +36,7 @@ impl Config {
 
     /// Busca el archivo o lo crea a partir del recurso embebido si no lo encuentra
     fn get_or_create_config() -> Result<PathBuf, Box<dyn std::error::Error>> {
+        debug!("Buscando archivo de configuración...");
         if let Some(path) = Self::find_config_file() {
             return Ok(path);
         }
@@ -43,29 +44,33 @@ impl Config {
         // Si no existe, lo creamos en el directorio XDG del usuario
         let proj_dirs = ProjectDirs::from("es", "atareao", "audiowave")
             .ok_or("No se pudo determinar el directorio de configuración del usuario")?;
-        
+
         let config_dir = proj_dirs.config_dir();
         let config_path = config_dir.join("config.yml");
 
         if !config_path.exists() {
             fs::create_dir_all(config_dir)?;
             fs::write(&config_path, DEFAULT_YAML)?;
-            debug!("✨ Configuración no encontrada. Se ha creado una por defecto en: {:?}", config_path);
+            debug!(
+                "✨ Configuración no encontrada. Se ha creado una por defecto en: {:?}",
+                config_path
+            );
         }
 
         Ok(config_path)
     }
 
     fn find_config_file() -> Option<PathBuf> {
+        debug!("Buscando archivo de configuración en rutas estándar...");
         let filename = "config.yml";
 
         // 1. Directorio del ejecutable
-        if let Ok(exe_path) = env::current_exe() {
-            if let Some(exe_dir) = exe_path.parent() {
-                let local_config = exe_dir.join(filename);
-                if local_config.exists() {
-                    return Some(local_config);
-                }
+        if let Ok(exe_path) = env::current_exe()
+            && let Some(exe_dir) = exe_path.parent()
+        {
+            let local_config = exe_dir.join(filename);
+            if local_config.exists() {
+                return Some(local_config);
             }
         }
 
@@ -127,7 +132,9 @@ mod tests {
         writeln!(file, "      x: '(w-text_w)/2'").unwrap();
         writeln!(file, "      y: '600'").unwrap();
 
-        let config = Config::load(Some(file_path.to_str().unwrap().to_string())).await.unwrap();
+        let config = Config::load(Some(file_path.to_str().unwrap().to_string()))
+            .await
+            .unwrap();
         assert!(config.templates.contains_key("default"));
         assert_eq!(config.templates.get("default").unwrap().video.width, 1920);
     }
