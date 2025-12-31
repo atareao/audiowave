@@ -25,7 +25,7 @@ pub struct Args {
 
     /// Archivo de configuración YAML
     #[arg(short = 'c', long, default_value = "config.yml")]
-    pub config: String,
+    pub config: Option<String>,
 
     /// Modo de prueba: solo genera los primeros 5 segundos
     #[arg(short, long)]

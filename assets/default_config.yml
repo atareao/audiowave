@@ -1,0 +1,28 @@
+templates:
+  default:
+    video:
+      width: 1920
+      height: 1080
+      fps: 30
+    background:
+      path: "background.jpg"
+      mode: "fill"
+    waveform:
+      width: 1200
+      height: 250
+      x: "(W-w)/2"
+      y: "H-h-150"
+      pipeline:
+        - "showwaves=s={w}x{h}:mode=line:colors=orange"
+    title:
+      font: "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf"
+      size: 80
+      color: "white"
+      x: "(w-text_w)/2"
+      y: "150"
+    subtitle:
+      font: "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf"
+      size: 40
+      color: "lightgray"
+      x: "(w-text_w)/2"
+      y: "250"

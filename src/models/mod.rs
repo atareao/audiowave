@@ -4,6 +4,7 @@ pub mod waveform;
 pub mod text;
 pub mod template;
 pub mod config;
+pub mod style;
 
 // Re-exportar para facilitar el uso
 pub use background::BackgroundSettings;
