@@ -80,11 +80,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .arg("-map").arg("[outv]")
         .arg("-map").arg("0:a")
         .arg("-c:v").arg("libx264")
-        .arg("-preset").arg("veryfast")
+        .arg("-preset").arg("slow")
         .arg("-crf").arg("18")
-        .arg("-c:a").arg("aac")        // CAMBIO: Usar aac en lugar de copy
-        .arg("-b:a").arg("192k")       // Asegurar calidad de audio
-        .arg(&output_file)
+        .arg("-pix_fmt").arg("yuv420p")
+        .arg("-movflags").arg("+faststart")
+        .arg("-shortest").arg(&output_file)
         .stderr(Stdio::piped());
 
     // Imprimir el comando generado como debug antes de spawn

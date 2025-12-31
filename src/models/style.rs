@@ -26,41 +26,42 @@ pub enum WaveformStyle {
     AudiogramBars,   // Estilo clásico de redes sociales con puntas redondeadas
     VoiceShadow,     // Una silueta rellena que parece una sombra proyectada
     SpectrumCircle,  // Un círculo concéntrico sutil que rodea un elemento central
+    GlowWaveModern,
 }
 
 impl WaveformStyle {
     pub fn get_filter(&self, width: u32, height: u32) -> String {
         let rgba_colorkey = ",format=rgba,colorkey=0x000000:0.1:0.1";
         match self {
-            WaveformStyle::ClassicLine => {
+            Self::ClassicLine => {
                 format!("showwaves=s={width}x{height}:mode=line:colors=cyan:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::CyberpunkSpectrum => {
+            Self::CyberpunkSpectrum => {
                 format!("showspectrum=s={width}x{height}:color=magma:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::AnalogOscilloscope => {
+            Self::AnalogOscilloscope => {
                 format!("avectorscope=s={width}x{height}:zoom=1.5:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::RetroStep => {
+            Self::RetroStep => {
                 format!("showfreqs=s={width}x{height}:mode=bar:colors=0x00FF00|0xFFFF00|0xFF0000:fscale=log{rgba_colorkey}")
             }
 
-            WaveformStyle::NebulaHistogram => {
+            Self::NebulaHistogram => {
                 format!("ahistogram=s={width}x{height}:color=rainbow:scale=log{rgba_colorkey}")
             }
 
-            WaveformStyle::PrismFrequency => {
+            Self::PrismFrequency => {
                 format!("showwaves=s={width}x{height}:mode=p2p:colors=magenta:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::DigitalPulse => {
+            Self::DigitalPulse => {
                 format!("showvolume=w={width}:h={height}:f=0.9:c=0xEE7611{rgba_colorkey}")
             }
 
-            WaveformStyle::NeonMirror => {
+            Self::NeonMirror => {
                 format!(
                     "showwaves=s={w}x{h}:mode=line:colors=cyan:rate=30,format=rgba[wave_raw]; \
                      [wave_raw]split[fg][bg_glow]; \
@@ -70,7 +71,7 @@ impl WaveformStyle {
                 )
             }
 
-            WaveformStyle::GlassBlur => {
+            Self::GlassBlur => {
                 format!(
                     "showfreqs=s={w}x{h}:mode=bar:colors=white:rate=30,format=rgba[wave]; \
                      [wave]drawbox=t=fill:color=black@0.4,boxblur=luma_radius=10:luma_power=1[glass]; \
@@ -79,11 +80,11 @@ impl WaveformStyle {
                 )
             }
 
-            WaveformStyle::GhostFrequency => {
+            Self::GhostFrequency => {
                 format!("showwaves=s={width}x{height}:mode=p2p:colors=cyan:rate=30,lagfun=decay=0.95{rgba_colorkey}")
             }
 
-            WaveformStyle::CyberCircle => {
+            Self::CyberCircle => {
                 format!(
                     "showwaves=s={w}x{h}:mode=line:colors=0x00FFFF:rate=30,format=rgba, \
                      polar=r=min(w\\,h)/2,colorkey=0x000000:0.1:0.1",
@@ -91,7 +92,7 @@ impl WaveformStyle {
                 )
             }
 
-            WaveformStyle::LiquidGold => {
+            Self::LiquidGold => {
                 format!(
                     "showwaves=s={w}x{h}:mode=p2p:colors=0xFFD700:rate=30,format=rgba, \
                      boxblur=2:1,colorkey=0x000000:0.1:0.1",
@@ -99,7 +100,7 @@ impl WaveformStyle {
                 )
             }
 
-            WaveformStyle::ElectricStorm => {
+            Self::ElectricStorm => {
                 format!(
                     "showpeaks=s={w}x{h}:mode=line:color=0x8888FF:rate=30,format=rgba, \
                      boxblur=10:1,colorkey=0x000000:0.1:0.1",
@@ -107,7 +108,7 @@ impl WaveformStyle {
                 )
             }
 
-            WaveformStyle::ZenithStack => {
+            Self::ZenithStack => {
                 format!(
                     "showspectrum=s={w}x{h}:mode=combined:color=fire:slide=scroll:fscale=log:rate=30,format=rgba, \
                      perspective=x0=0.2*W:y0=0:x1=0.8*W:y1=0:x2=0:y2=H:x3=W:y3=H,colorkey=0x000000:0.1:0.1",
@@ -115,7 +116,7 @@ impl WaveformStyle {
                 )
             }
 
-            WaveformStyle::PulseRadar => {
+            Self::PulseRadar => {
                 format!(
                     "showfreqs=s={w}x{h}:mode=bar:colors=0x00FF00:rate=30,format=rgba, \
                      polar=r=min(w\\,h)/2,lagfun=decay=0.9,colorkey=0x000000:0.1:0.1",
@@ -123,39 +124,47 @@ impl WaveformStyle {
                 )
             }
 
-            WaveformStyle::StudioBars => {
+            Self::StudioBars => {
                 format!("showwaves=s={width}x{height}:mode=cline:colors=white:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::MinimalMono => {
+            Self::MinimalMono => {
                 format!("showwaves=s={width}x{height}:mode=line:colors=white:draw=full:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::WaveformSolid => {
+            Self::WaveformSolid => {
                 format!("showwaves=s={width}x{height}:mode=p2p:colors=white@0.5:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::BroadcastPoint => {
+            Self::BroadcastPoint => {
                 format!("showwaves=s={width}x{height}:mode=point:colors=white@0.6:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::TalkFlow => {
+            Self::TalkFlow => {
                 format!("showwaves=s={width}x{height}:mode=p2p:colors=white:draw=full:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::AudiogramBars => {
+            Self::AudiogramBars => {
                 format!("showfreqs=s={width}x{height}:mode=bar:colors=white:fscale=log:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::VoiceShadow => {
+            Self::VoiceShadow => {
                 format!("showwaves=s={width}x{height}:mode=cline:colors=white@0.3:draw=full:rate=30{rgba_colorkey}")
             }
 
-            WaveformStyle::SpectrumCircle => {
+            Self::SpectrumCircle => {
                 format!(
                     "showspectrum=s={w}x{h}:mode=combined:color=white:slide=scroll:overlap=0.9:rate=30,format=rgba, \
                      polar=r=min(w\\,h)/2,colorkey=0x000000:0.1:0.1",
                     w = width, h = height
+                )
+            }
+
+            Self::GlowWaveModern => {
+                format!(
+                    "showwaves=s={width}x{height}:mode=cline:rate=30:colors=#0x00e5ff,format=rgba[clean];\
+                     [clean]boxblur=3:1[halo];\
+                     [clean][halo]overlay=0:0,tblend=all_mode=average"
                 )
             }
         }
