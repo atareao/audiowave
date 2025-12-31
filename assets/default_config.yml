@@ -23,6 +23,6 @@ templates:
     subtitle:
       font: "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf"
       size: 40
-      color: "lightgray"
+      color: "white"
       x: "(w-text_w)/2"
       y: "250"

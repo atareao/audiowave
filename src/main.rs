@@ -19,7 +19,12 @@ use std::{
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
-    let config = Config::load(args.config.clone()).await?;
+    let config_path = if args.config.is_empty() {
+        None
+    } else {
+        Some(args.config.clone())
+    };
+    let config = Config::load(config_path).await?;
     let template = config
         .templates
         .get(&args.template)
