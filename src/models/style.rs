@@ -218,3 +218,146 @@ impl WaveformStyle {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_filter_classic_line() {
+        let style = WaveformStyle::ClassicLine;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=line:colors=cyan");
+    }
+
+    #[test]
+    fn test_get_filter_cyberpunk_spectrum() {
+        let style = WaveformStyle::CyberpunkSpectrum;
+        assert_eq!(style.get_filter(100, 50), "showspectrum=s=100x50:color=magma");
+    }
+
+    #[test]
+    fn test_get_filter_analog_oscilloscope() {
+        let style = WaveformStyle::AnalogOscilloscope;
+        assert_eq!(style.get_filter(100, 50), "avectorscope=s=100x50:zoom=1.5");
+    }
+
+    #[test]
+    fn test_get_filter_retro_step() {
+        let style = WaveformStyle::RetroStep;
+        assert_eq!(style.get_filter(100, 50), "showfreqs=s=100x50:mode=bar:colors=0x00FF00|0xFFFF00|0xFF0000:fscale=log");
+    }
+
+    #[test]
+    fn test_get_filter_nebula_histogram() {
+        let style = WaveformStyle::NebulaHistogram;
+        assert_eq!(style.get_filter(100, 50), "ahistogram=s=100x50:color=rainbow:scale=log");
+    }
+
+    #[test]
+    fn test_get_filter_prism_frequency() {
+        let style = WaveformStyle::PrismFrequency;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=magenta,format=yuv420p");
+    }
+
+    #[test]
+    fn test_get_filter_digital_pulse() {
+        let style = WaveformStyle::DigitalPulse;
+        assert_eq!(style.get_filter(100, 50), "showvolume=w=100:h=50:f=0.9:c=0xEE7611");
+    }
+
+    #[test]
+    fn test_get_filter_neon_mirror() {
+        let style = WaveformStyle::NeonMirror;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x25:mode=line:colors=0xFF00FF[v]; [v]split[main][mirror]; [mirror]vflip,format=rgba,colorchannelmixer=aa=0.3,boxblur=5[m_final]; [main][m_final]vstack");
+    }
+
+    #[test]
+    fn test_get_filter_glass_blur() {
+        let style = WaveformStyle::GlassBlur;
+        assert_eq!(style.get_filter(100, 50), "showfreqs=s=100x50:mode=bar:colors=white[wave]; [wave]format=rgba,drawbox=t=fill:color=black@0.4[bg_box]; [bg_box]boxblur=luma_radius=10:luma_power=1[glass]; [glass][wave]overlay");
+    }
+
+    #[test]
+    fn test_get_filter_ghost_frequency() {
+        let style = WaveformStyle::GhostFrequency;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=cyan,format=rgba,lagfun=decay=0.95");
+    }
+
+    #[test]
+    fn test_get_filter_cyber_circle() {
+        let style = WaveformStyle::CyberCircle;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=line:colors=0x00FFFF, format=yuv420p, polar=r=min(w\\,h)/2:start=0:end=360");
+    }
+
+    #[test]
+    fn test_get_filter_liquid_gold() {
+        let style = WaveformStyle::LiquidGold;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=0xFFD700, format=rgba, boxblur=2:1, colormatrix=bt709:fcc");
+    }
+
+    #[test]
+    fn test_get_filter_electric_storm() {
+        let style = WaveformStyle::ElectricStorm;
+        assert_eq!(style.get_filter(100, 50), "showpeaks=s=100x50:mode=line:color=0x8888FF, drawbox=t=fill:color=0x0000FF@0.1, boxblur=10:1");
+    }
+
+    #[test]
+    fn test_get_filter_zenith_stack() {
+        let style = WaveformStyle::ZenithStack;
+        assert_eq!(style.get_filter(100, 50), "showspectrum=s=100x50:mode=combined:color=fire:slide=scroll:fscale=log, format=rgba, perspective=x0=0.2*W:y0=0:x1=0.8*W:y1=0:x2=0:y2=H:x3=W:y3=H");
+    }
+
+    #[test]
+    fn test_get_filter_pulse_radar() {
+        let style = WaveformStyle::PulseRadar;
+        assert_eq!(style.get_filter(100, 50), "showfreqs=s=100x50:mode=bar:colors=0x00FF00, format=rgba, polar=r=min(w\\,h)/2, lagfun=decay=0.9");
+    }
+
+    #[test]
+    fn test_get_filter_studio_bars() {
+        let style = WaveformStyle::StudioBars;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=cline:colors=0xFFFFFF@0.8:draw=full");
+    }
+
+    #[test]
+    fn test_get_filter_minimal_mono() {
+        let style = WaveformStyle::MinimalMono;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=line:colors=white:draw=full, format=rgba, boxblur=1:1");
+    }
+
+    #[test]
+    fn test_get_filter_waveform_solid() {
+        let style = WaveformStyle::WaveformSolid;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=white@0.5, format=rgba, fillcmd=fill");
+    }
+
+    #[test]
+    fn test_get_filter_broadcast_point() {
+        let style = WaveformStyle::BroadcastPoint;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=point:colors=white@0.6");
+    }
+
+    #[test]
+    fn test_get_filter_talk_flow() {
+        let style = WaveformStyle::TalkFlow;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=white:draw=full, format=rgba, lowpass=f=500");
+    }
+
+    #[test]
+    fn test_get_filter_audiogram_bars() {
+        let style = WaveformStyle::AudiogramBars;
+        assert_eq!(style.get_filter(100, 50), "showfreqs=s=100x50:mode=bar:colors=0xFFFFFF@0.9:fscale=log, format=rgba, boxblur=2:2");
+    }
+
+    #[test]
+    fn test_get_filter_voice_shadow() {
+        let style = WaveformStyle::VoiceShadow;
+        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=cline:colors=white@0.3:draw=full");
+    }
+
+    #[test]
+    fn test_get_filter_spectrum_circle() {
+        let style = WaveformStyle::SpectrumCircle;
+        assert_eq!(style.get_filter(100, 50), "showspectrum=s=100x50:mode=combined:color=white:slide=scroll:overlap=0.9, format=rgba, polar=r=min(w\\,h)/2");
+    }
+}

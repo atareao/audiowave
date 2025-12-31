@@ -34,3 +34,50 @@ impl Template {
         )
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::models::style::WaveformStyle;
+
+    #[test]
+    fn test_build_filter_complex() {
+        let template = Template {
+            video: VideoSettings {
+                width: 1920,
+                height: 1080,
+                fps: 30,
+            },
+            background: BackgroundSettings {
+                path: "background.png".to_string(),
+                mode: "stretch".to_string(),
+            },
+            waveform: WaveformSettings {
+                style: Some(WaveformStyle::ClassicLine),
+                width: 800,
+                height: 300,
+                x: "100".to_string(),
+                y: "200".to_string(),
+                pipeline: None,
+            },
+            title: TextSettings {
+                font: "Arial".to_string(),
+                size: 64,
+                color: "white".to_string(),
+                x: "(w-text_w)/2".to_string(),
+                y: "540".to_string(),
+            },
+            subtitle: TextSettings {
+                font: "Arial".to_string(),
+                size: 32,
+                color: "white".to_string(),
+                x: "(w-text_w)/2".to_string(),
+                y: "600".to_string(),
+            },
+        };
+
+        let filter = template.build_filter_complex("My Title", "My Subtitle");
+        let expected = "[1:v]scale=1920:1080[bg]; [0:a]showwaves=s=800x300:mode=line:colors=cyan[wave_out]; [bg][wave_out]overlay=x=100:y=200:shortest=1[v1]; [v1]drawtext=text='My Title':fontfile='Arial':fontsize=64:fontcolor=white:x=(w-text_w)/2:y=540,drawtext=text='My Subtitle':fontfile='Arial':fontsize=32:fontcolor=white:x=(w-text_w)/2:y=600[outv]";
+        assert_eq!(filter, expected);
+    }
+}

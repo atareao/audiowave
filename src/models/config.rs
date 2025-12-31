@@ -84,3 +84,55 @@ impl Config {
         None
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs::File;
+    use std::io::Write;
+    use tempfile::tempdir;
+
+    #[tokio::test]
+    async fn test_load_from_path() {
+        let dir = tempdir().unwrap();
+        let file_path = dir.path().join("config.yml");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "templates:").unwrap();
+        writeln!(file, "  default:").unwrap();
+        writeln!(file, "    video:").unwrap();
+        writeln!(file, "      width: 1920").unwrap();
+        writeln!(file, "      height: 1080").unwrap();
+        writeln!(file, "      fps: 30").unwrap();
+        writeln!(file, "    background:").unwrap();
+        writeln!(file, "      path: 'background.png'").unwrap();
+        writeln!(file, "      mode: 'stretch'").unwrap();
+        writeln!(file, "    waveform:").unwrap();
+        writeln!(file, "      width: 800").unwrap();
+        writeln!(file, "      height: 300").unwrap();
+        writeln!(file, "      x: '100'").unwrap();
+        writeln!(file, "      y: '200'").unwrap();
+        writeln!(file, "      style: classic_line").unwrap();
+        writeln!(file, "    title:").unwrap();
+        writeln!(file, "      font: 'Arial'").unwrap();
+        writeln!(file, "      size: 64").unwrap();
+        writeln!(file, "      color: 'white'").unwrap();
+        writeln!(file, "      x: '(w-text_w)/2'").unwrap();
+        writeln!(file, "      y: '540'").unwrap();
+        writeln!(file, "    subtitle:").unwrap();
+        writeln!(file, "      font: 'Arial'").unwrap();
+        writeln!(file, "      size: 32").unwrap();
+        writeln!(file, "      color: 'white'").unwrap();
+        writeln!(file, "      x: '(w-text_w)/2'").unwrap();
+        writeln!(file, "      y: '600'").unwrap();
+
+        let config = Config::load(Some(file_path.to_str().unwrap().to_string())).await.unwrap();
+        assert!(config.templates.contains_key("default"));
+        assert_eq!(config.templates.get("default").unwrap().video.width, 1920);
+    }
+
+    #[tokio::test]
+    async fn test_load_not_found() {
+        let result = Config::load(Some("non_existent_file.yml".to_string())).await;
+        assert!(result.is_err());
+    }
+}

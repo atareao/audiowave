@@ -47,3 +47,65 @@ impl WaveformSettings {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::models::style::WaveformStyle;
+
+    #[test]
+    fn test_to_filter_chain_with_style_only() {
+        let settings = WaveformSettings {
+            width: 800,
+            height: 300,
+            x: "100".to_string(),
+            y: "200".to_string(),
+            style: Some(WaveformStyle::ClassicLine),
+            pipeline: None,
+        };
+        let expected = "showwaves=s=800x300:mode=line:colors=cyan";
+        assert_eq!(settings.to_filter_chain(), expected);
+    }
+
+    #[test]
+    fn test_to_filter_chain_with_style_and_pipeline() {
+        let settings = WaveformSettings {
+            width: 800,
+            height: 300,
+            x: "100".to_string(),
+            y: "200".to_string(),
+            style: Some(WaveformStyle::ClassicLine),
+            pipeline: Some(vec!["aformat=channel_layouts=mono".to_string(), "compand".to_string()]),
+        };
+        let expected = "showwaves=s=800x300:mode=line:colors=cyan,aformat=channel_layouts=mono,compand";
+        assert_eq!(settings.to_filter_chain(), expected);
+    }
+
+    #[test]
+    fn test_to_filter_chain_with_pipeline_only() {
+        let settings = WaveformSettings {
+            width: 800,
+            height: 300,
+            x: "100".to_string(),
+            y: "200".to_string(),
+            style: None,
+            pipeline: Some(vec!["showwaves=s={w}x{h}:colors=red".to_string(), "compand".to_string()]),
+        };
+        let expected = "showwaves=s=800x300:colors=red,compand";
+        assert_eq!(settings.to_filter_chain(), expected);
+    }
+
+    #[test]
+    fn test_to_filter_chain_with_no_style_no_pipeline() {
+        let settings = WaveformSettings {
+            width: 800,
+            height: 300,
+            x: "100".to_string(),
+            y: "200".to_string(),
+            style: None,
+            pipeline: None,
+        };
+        let expected = "showwaves=s=800x300";
+        assert_eq!(settings.to_filter_chain(), expected);
+    }
+}

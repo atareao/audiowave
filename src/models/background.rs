@@ -15,3 +15,35 @@ impl BackgroundSettings {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_to_filter_stretch() {
+        let settings = BackgroundSettings {
+            path: "test.png".to_string(),
+            mode: "stretch".to_string(),
+        };
+        assert_eq!(settings.to_filter(1920, 1080), "scale=1920:1080");
+    }
+
+    #[test]
+    fn test_to_filter_fit() {
+        let settings = BackgroundSettings {
+            path: "test.png".to_string(),
+            mode: "fit".to_string(),
+        };
+        assert_eq!(settings.to_filter(1920, 1080), "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2");
+    }
+
+    #[test]
+    fn test_to_filter_fill() {
+        let settings = BackgroundSettings {
+            path: "test.png".to_string(),
+            mode: "fill".to_string(),
+        };
+        assert_eq!(settings.to_filter(1920, 1080), "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080");
+    }
+}

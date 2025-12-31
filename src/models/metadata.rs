@@ -51,3 +51,16 @@ impl AudioMetadata {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_new_with_non_existent_file() {
+        let metadata = AudioMetadata::new("non_existent_file.mp3".to_string()).await;
+        assert_eq!(metadata.title, "Nuevo Episodio");
+        assert_eq!(metadata.artist, "atareao con Linux");
+        assert!(metadata.cover_path.is_none());
+    }
+}
