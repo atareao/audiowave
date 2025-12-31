@@ -30,4 +30,8 @@ pub struct Args {
     /// Modo de prueba: solo genera los primeros 5 segundos
     #[arg(short, long)]
     pub preview: bool,
+
+    /// Activa el modo DEBUG
+    #[arg(long)]
+    pub debug: bool,
 }

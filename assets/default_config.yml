@@ -12,8 +12,7 @@ templates:
       height: 250
       x: "(W-w)/2"
       y: "H-h-150"
-      pipeline:
-        - "showwaves=s={w}x{h}:mode=line:colors=orange"
+      style: "neon_mirror" 
     title:
       font: "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf"
       size: 80
