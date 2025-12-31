@@ -6,213 +6,156 @@ pub enum WaveformStyle {
     ClassicLine,
     CyberpunkSpectrum,
     AnalogOscilloscope,
-    RetroStep,        // Barras sólidas tipo ecualizador antiguo
-    NebulaHistogram,  // Histograma de audio tipo cascada
-    PrismFrequency,   // Espectro de frecuencia circular
-    DigitalPulse,     // Bloques de volumen dinámicos
+    RetroStep,       // Barras sólidas tipo ecualizador antiguo
+    NebulaHistogram, // Histograma de audio tipo cascada
+    PrismFrequency,  // Espectro de frecuencia circular
+    DigitalPulse,    // Bloques de volumen dinámicos
     NeonMirror,      // Onda con reflejo inferior y brillo (glow)
     GlassBlur,       // Fondo translúcido con desenfoque gaussiano
     GhostFrequency,  // Estilo minimalista con rastro de movimiento (transparencia dinámica)
-    CyberCircle,      // Onda circular tipo Iron Man / HUD
-    LiquidGold,       // Estilo fluido con deformación y color cálido
-    ElectricStorm,    // Rayos aleatorios basados en picos de frecuencia
-    ZenithStack,      // Acumulación de espectro en 3D falso (estilo montaña)
-    PulseRadar,       // Radar circular con barrido de frecuencia
-    StudioBars,       // Barras simétricas desde el centro (tipo Audiogram)
-    MinimalMono,      // Línea única ultra-fina con degradado suave
-    WaveformSolid,    // Área rellena (silhouette) con suavizado
-    BroadcastPoint,   // Puntos que reaccionan sutilmente (estilo elegante)
-    TalkFlow,         // Onda suave y contínua, ideal para la voz humana
-    AudiogramBars,    // Estilo clásico de redes sociales con puntas redondeadas
-    VoiceShadow,      // Una silueta rellena que parece una sombra proyectada
-    SpectrumCircle,   // Un círculo concéntrico sutil que rodea un elemento central
+    CyberCircle,     // Onda circular tipo Iron Man / HUD
+    LiquidGold,      // Estilo fluido con deformación y color cálido
+    ElectricStorm,   // Rayos aleatorios basados en picos de frecuencia
+    ZenithStack,     // Acumulación de espectro en 3D falso (estilo montaña)
+    PulseRadar,      // Radar circular con barrido de frecuencia
+    StudioBars,      // Barras simétricas desde el centro (tipo Audiogram)
+    MinimalMono,     // Línea única ultra-fina con degradado suave
+    WaveformSolid,   // Área rellena (silhouette) con suavizado
+    BroadcastPoint,  // Puntos que reaccionan sutilmente (estilo elegante)
+    TalkFlow,        // Onda suave y contínua, ideal para la voz humana
+    AudiogramBars,   // Estilo clásico de redes sociales con puntas redondeadas
+    VoiceShadow,     // Una silueta rellena que parece una sombra proyectada
+    SpectrumCircle,  // Un círculo concéntrico sutil que rodea un elemento central
 }
 
 impl WaveformStyle {
     pub fn get_filter(&self, width: u32, height: u32) -> String {
+        let rgba_colorkey = ",format=rgba,colorkey=0x000000:0.1:0.1";
         match self {
             WaveformStyle::ClassicLine => {
-                format!("showwaves=s={width}x{height}:mode=line:colors=cyan")
+                format!("showwaves=s={width}x{height}:mode=line:colors=cyan:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::CyberpunkSpectrum => {
-                format!("showspectrum=s={width}x{height}:color=magma")
+                format!("showspectrum=s={width}x{height}:color=magma:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::AnalogOscilloscope => {
-                format!("avectorscope=s={width}x{height}:zoom=1.5")
+                format!("avectorscope=s={width}x{height}:zoom=1.5:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::RetroStep => {
-                format!("showfreqs=s={width}x{height}:mode=bar:colors=0x00FF00|0xFFFF00|0xFF0000:fscale=log")
+                format!("showfreqs=s={width}x{height}:mode=bar:colors=0x00FF00|0xFFFF00|0xFF0000:fscale=log{rgba_colorkey}")
             }
 
             WaveformStyle::NebulaHistogram => {
-                format!("ahistogram=s={width}x{height}:color=rainbow:scale=log")
+                format!("ahistogram=s={width}x{height}:color=rainbow:scale=log{rgba_colorkey}")
             }
 
             WaveformStyle::PrismFrequency => {
-                // Genera la frecuencia y luego la envuelve en coordenadas polares
-                format!("showwaves=s={width}x{height}:mode=p2p:colors=magenta,format=yuv420p")
+                format!("showwaves=s={width}x{height}:mode=p2p:colors=magenta:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::DigitalPulse => {
-                format!("showvolume=w={width}:h={height}:f=0.9:c=0xEE7611")
+                format!("showvolume=w={width}:h={height}:f=0.9:c=0xEE7611{rgba_colorkey}")
             }
 
             WaveformStyle::NeonMirror => {
-                // Genera la onda, la duplica, voltea una y le da opacidad/desenfoque
                 format!(
-                    "showwaves=s={w}x{h}:mode=line:colors=0xFF00FF[v]; \
-                     [v]split[main][mirror]; \
-                     [mirror]vflip,format=rgba,colorchannelmixer=aa=0.3,boxblur=5[m_final]; \
-                     [main][m_final]vstack", 
-                    w=width, h=height/2 // La onda ocupa la mitad para dejar espacio al reflejo
+                    "showwaves=s={w}x{h}:mode=line:colors=cyan:rate=30,format=rgba[wave_raw]; \
+                     [wave_raw]split[fg][bg_glow]; \
+                     [bg_glow]boxblur=10:5[glow]; \
+                     [glow][fg]overlay=format=auto,colorkey=0x000000:0.1:0.1",
+                    w = width, h = height
                 )
             }
 
             WaveformStyle::GlassBlur => {
-                // Crea un panel de "cristal" desenfocado detrás de la onda
                 format!(
-                    "showfreqs=s={w}x{h}:mode=bar:colors=white[wave]; \
-                     [wave]format=rgba,drawbox=t=fill:color=black@0.4[bg_box]; \
-                     [bg_box]boxblur=luma_radius=10:luma_power=1[glass]; \
-                     [glass][wave]overlay",
-                    w=width, h=height
+                    "showfreqs=s={w}x{h}:mode=bar:colors=white:rate=30,format=rgba[wave]; \
+                     [wave]drawbox=t=fill:color=black@0.4,boxblur=luma_radius=10:luma_power=1[glass]; \
+                     [glass][wave]overlay,colorkey=0x000000:0.1:0.1",
+                    w = width, h = height
                 )
             }
 
             WaveformStyle::GhostFrequency => {
-                // Usa el filtro 'lagfun' para que la onda deje un rastro transparente al moverse
-                format!(
-                    "showwaves=s={w}x{h}:mode=p2p:colors=cyan,format=rgba,lagfun=decay=0.95",
-                    w=width, h=height
-                )
+                format!("showwaves=s={width}x{height}:mode=p2p:colors=cyan:rate=30,lagfun=decay=0.95{rgba_colorkey}")
             }
 
             WaveformStyle::CyberCircle => {
-                // Genera la onda y la proyecta en coordenadas polares para hacerla circular
                 format!(
-                    "showwaves=s={w}x{h}:mode=line:colors=0x00FFFF, \
-                     format=yuv420p, \
-                     polar=r=min(w\\,h)/2:start=0:end=360",
-                    w=width, h=height
+                    "showwaves=s={w}x{h}:mode=line:colors=0x00FFFF:rate=30,format=rgba, \
+                     polar=r=min(w\\,h)/2,colorkey=0x000000:0.1:0.1",
+                    w = width, h = height
                 )
             }
 
             WaveformStyle::LiquidGold => {
-                // Usa un filtro de desplazamiento (displace) para dar aspecto viscoso
                 format!(
-                    "showwaves=s={w}x{h}:mode=p2p:colors=0xFFD700, \
-                     format=rgba, \
-                     boxblur=2:1, \
-                     colormatrix=bt709:fcc",
-                    w=width, h=height
+                    "showwaves=s={w}x{h}:mode=p2p:colors=0xFFD700:rate=30,format=rgba, \
+                     boxblur=2:1,colorkey=0x000000:0.1:0.1",
+                    w = width, h = height
                 )
             }
 
             WaveformStyle::ElectricStorm => {
-                // Utiliza 'showpeaks' para generar rayos que saltan con el volumen
                 format!(
-                    "showpeaks=s={w}x{h}:mode=line:color=0x8888FF, \
-                     drawbox=t=fill:color=0x0000FF@0.1, \
-                     boxblur=10:1",
-                    w=width, h=height
+                    "showpeaks=s={w}x{h}:mode=line:color=0x8888FF:rate=30,format=rgba, \
+                     boxblur=10:1,colorkey=0x000000:0.1:0.1",
+                    w = width, h = height
                 )
             }
 
             WaveformStyle::ZenithStack => {
-                // Acumula el espectro creando un efecto de profundidad 3D
                 format!(
-                    "showspectrum=s={w}x{h}:mode=combined:color=fire:slide=scroll:fscale=log, \
-                     format=rgba, \
-                     perspective=x0=0.2*W:y0=0:x1=0.8*W:y1=0:x2=0:y2=H:x3=W:y3=H",
-                    w=width, h=height
+                    "showspectrum=s={w}x{h}:mode=combined:color=fire:slide=scroll:fscale=log:rate=30,format=rgba, \
+                     perspective=x0=0.2*W:y0=0:x1=0.8*W:y1=0:x2=0:y2=H:x3=W:y3=H,colorkey=0x000000:0.1:0.1",
+                    w = width, h = height
                 )
             }
 
             WaveformStyle::PulseRadar => {
-                // Combinación de espectro circular con un rastro de desvanecimiento
                 format!(
-                    "showfreqs=s={w}x{h}:mode=bar:colors=0x00FF00, \
-                     format=rgba, \
-                     polar=r=min(w\\,h)/2, \
-                     lagfun=decay=0.9" ,
-                    w=width, h=height
+                    "showfreqs=s={w}x{h}:mode=bar:colors=0x00FF00:rate=30,format=rgba, \
+                     polar=r=min(w\\,h)/2,lagfun=decay=0.9,colorkey=0x000000:0.1:0.1",
+                    w = width, h = height
                 )
             }
 
             WaveformStyle::StudioBars => {
-                // Barras que crecen hacia arriba y abajo desde el eje central
-                format!(
-                    "showwaves=s={w}x{h}:mode=cline:colors=0xFFFFFF@0.8:draw=full",
-                    w=width, h=height
-                )
+                format!("showwaves=s={width}x{height}:mode=cline:colors=white:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::MinimalMono => {
-                // Una línea muy fina con un ligero rastro para que no parpadee
-                format!(
-                    "showwaves=s={w}x{h}:mode=line:colors=white:draw=full, \
-                     format=rgba, \
-                     boxblur=1:1" ,
-                    w=width, h=height
-                )
+                format!("showwaves=s={width}x{height}:mode=line:colors=white:draw=full:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::WaveformSolid => {
-                // Relleno sólido de la onda, muy común en edición de audio profesional
-                format!(
-                    "showwaves=s={w}x{h}:mode=p2p:colors=white@0.5, \
-                     format=rgba, \
-                     fillcmd=fill",
-                    w=width, h=height
-                )
+                format!("showwaves=s={width}x{height}:mode=p2p:colors=white@0.5:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::BroadcastPoint => {
-                // Puntos discretos que flotan, dan movimiento sin saturar la imagen
-                format!(
-                    "showwaves=s={w}x{h}:mode=point:colors=white@0.6",
-                    w=width, h=height
-                )
+                format!("showwaves=s={width}x{height}:mode=point:colors=white@0.6:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::TalkFlow => {
-                // Una línea suave (p2p) con un filtro de promedio para evitar picos agresivos
-                format!(
-                    "showwaves=s={w}x{h}:mode=p2p:colors=white:draw=full, \
-                     format=rgba, \
-                     lowpass=f=500" ,
-                    w=width, h=height
-                )
+                format!("showwaves=s={width}x{height}:mode=p2p:colors=white:draw=full:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::AudiogramBars => {
-                // Barras gruesas (mode=bar) con un ligero blur para simular bordes redondeados
-                format!(
-                    "showfreqs=s={w}x{h}:mode=bar:colors=0xFFFFFF@0.9:fscale=log, \
-                     format=rgba, \
-                     boxblur=2:2" ,
-                    w=width, h=height
-                )
+                format!("showfreqs=s={width}x{height}:mode=bar:colors=white:fscale=log:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::VoiceShadow => {
-                // Una onda rellena con opacidad baja, ideal para poner detrás de un logo o texto
-                format!(
-                    "showwaves=s={w}x{h}:mode=cline:colors=white@0.3:draw=full",
-                    w=width, h=height
-                )
+                format!("showwaves=s={width}x{height}:mode=cline:colors=white@0.3:draw=full:rate=30{rgba_colorkey}")
             }
 
             WaveformStyle::SpectrumCircle => {
-                // Espectro circular muy fino, perfecto para envolver la carátula del episodio
                 format!(
-                    "showspectrum=s={w}x{h}:mode=combined:color=white:slide=scroll:overlap=0.9, \
-                     format=rgba, \
-                     polar=r=min(w\\,h)/2" ,
-                    w=width, h=height
+                    "showspectrum=s={w}x{h}:mode=combined:color=white:slide=scroll:overlap=0.9:rate=30,format=rgba, \
+                     polar=r=min(w\\,h)/2,colorkey=0x000000:0.1:0.1",
+                    w = width, h = height
                 )
             }
         }
@@ -226,138 +169,204 @@ mod tests {
     #[test]
     fn test_get_filter_classic_line() {
         let style = WaveformStyle::ClassicLine;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=line:colors=cyan");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=line:colors=cyan:rate=30,format=rgba,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_cyberpunk_spectrum() {
         let style = WaveformStyle::CyberpunkSpectrum;
-        assert_eq!(style.get_filter(100, 50), "showspectrum=s=100x50:color=magma");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showspectrum=s=100x50:color=magma:rate=30,format=rgba,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_analog_oscilloscope() {
         let style = WaveformStyle::AnalogOscilloscope;
-        assert_eq!(style.get_filter(100, 50), "avectorscope=s=100x50:zoom=1.5");
+        assert_eq!(style.get_filter(100, 50), "avectorscope=s=100x50:zoom=1.5:rate=30,format=rgba,colorkey=0x000000:0.1:0.1");
     }
 
     #[test]
     fn test_get_filter_retro_step() {
         let style = WaveformStyle::RetroStep;
-        assert_eq!(style.get_filter(100, 50), "showfreqs=s=100x50:mode=bar:colors=0x00FF00|0xFFFF00|0xFF0000:fscale=log");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showfreqs=s=100x50:mode=bar:colors=0x00FF00|0xFFFF00|0xFF0000:fscale=log,format=rgba,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_nebula_histogram() {
         let style = WaveformStyle::NebulaHistogram;
-        assert_eq!(style.get_filter(100, 50), "ahistogram=s=100x50:color=rainbow:scale=log");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "ahistogram=s=100x50:color=rainbow:scale=log,format=rgba,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_prism_frequency() {
         let style = WaveformStyle::PrismFrequency;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=magenta,format=yuv420p");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=p2p:colors=magenta:rate=30,format=rgba,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_digital_pulse() {
         let style = WaveformStyle::DigitalPulse;
-        assert_eq!(style.get_filter(100, 50), "showvolume=w=100:h=50:f=0.9:c=0xEE7611");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showvolume=w=100:h=50:f=0.9:c=0xEE7611,format=rgba,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_neon_mirror() {
         let style = WaveformStyle::NeonMirror;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x25:mode=line:colors=0xFF00FF[v]; [v]split[main][mirror]; [mirror]vflip,format=rgba,colorchannelmixer=aa=0.3,boxblur=5[m_final]; [main][m_final]vstack");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=line:colors=cyan:rate=30,format=rgba[wave_raw]; [wave_raw]split[fg][bg_glow]; [bg_glow]boxblur=10:5[glow]; [glow][fg]overlay=format=auto,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_glass_blur() {
         let style = WaveformStyle::GlassBlur;
-        assert_eq!(style.get_filter(100, 50), "showfreqs=s=100x50:mode=bar:colors=white[wave]; [wave]format=rgba,drawbox=t=fill:color=black@0.4[bg_box]; [bg_box]boxblur=luma_radius=10:luma_power=1[glass]; [glass][wave]overlay");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showfreqs=s=100x50:mode=bar:colors=white:rate=30,format=rgba[wave]; [wave]drawbox=t=fill:color=black@0.4,boxblur=luma_radius=10:luma_power=1[glass]; [glass][wave]overlay,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_ghost_frequency() {
         let style = WaveformStyle::GhostFrequency;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=cyan,format=rgba,lagfun=decay=0.95");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=p2p:colors=cyan:rate=30,lagfun=decay=0.95,format=rgba,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_cyber_circle() {
         let style = WaveformStyle::CyberCircle;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=line:colors=0x00FFFF, format=yuv420p, polar=r=min(w\\,h)/2:start=0:end=360");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=line:colors=0x00FFFF:rate=30,format=rgba, polar=r=min(w\\,h)/2,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_liquid_gold() {
         let style = WaveformStyle::LiquidGold;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=0xFFD700, format=rgba, boxblur=2:1, colormatrix=bt709:fcc");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=p2p:colors=0xFFD700:rate=30,format=rgba, boxblur=2:1,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_electric_storm() {
         let style = WaveformStyle::ElectricStorm;
-        assert_eq!(style.get_filter(100, 50), "showpeaks=s=100x50:mode=line:color=0x8888FF, drawbox=t=fill:color=0x0000FF@0.1, boxblur=10:1");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showpeaks=s=100x50:mode=line:color=0x8888FF:rate=30,format=rgba, boxblur=10:1,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_zenith_stack() {
         let style = WaveformStyle::ZenithStack;
-        assert_eq!(style.get_filter(100, 50), "showspectrum=s=100x50:mode=combined:color=fire:slide=scroll:fscale=log, format=rgba, perspective=x0=0.2*W:y0=0:x1=0.8*W:y1=0:x2=0:y2=H:x3=W:y3=H");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showspectrum=s=100x50:mode=combined:color=fire:slide=scroll:fscale=log:rate=30,format=rgba, perspective=x0=0.2*W:y0=0:x1=0.8*W:y1=0:x2=0:y2=H:x3=W:y3=H,colorkey=0x000000:0.1:0.1"
+        );
     }
 
     #[test]
     fn test_get_filter_pulse_radar() {
         let style = WaveformStyle::PulseRadar;
-        assert_eq!(style.get_filter(100, 50), "showfreqs=s=100x50:mode=bar:colors=0x00FF00, format=rgba, polar=r=min(w\\,h)/2, lagfun=decay=0.9");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showfreqs=s=100x50:mode=bar:colors=0x00FF00, format=rgba, polar=r=min(w\\,h)/2, lagfun=decay=0.9"
+        );
     }
 
     #[test]
     fn test_get_filter_studio_bars() {
         let style = WaveformStyle::StudioBars;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=cline:colors=0xFFFFFF@0.8:draw=full");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=cline:colors=0xFFFFFF@0.8:draw=full"
+        );
     }
 
     #[test]
     fn test_get_filter_minimal_mono() {
         let style = WaveformStyle::MinimalMono;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=line:colors=white:draw=full, format=rgba, boxblur=1:1");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=line:colors=white:draw=full, format=rgba, boxblur=1:1"
+        );
     }
 
     #[test]
     fn test_get_filter_waveform_solid() {
         let style = WaveformStyle::WaveformSolid;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=white@0.5, format=rgba, fillcmd=fill");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=p2p:colors=white@0.5, format=rgba, fillcmd=fill"
+        );
     }
 
     #[test]
     fn test_get_filter_broadcast_point() {
         let style = WaveformStyle::BroadcastPoint;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=point:colors=white@0.6");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=point:colors=white@0.6"
+        );
     }
 
     #[test]
     fn test_get_filter_talk_flow() {
         let style = WaveformStyle::TalkFlow;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=p2p:colors=white:draw=full, format=rgba, lowpass=f=500");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=p2p:colors=white:draw=full, format=rgba, lowpass=f=500"
+        );
     }
 
     #[test]
     fn test_get_filter_audiogram_bars() {
         let style = WaveformStyle::AudiogramBars;
-        assert_eq!(style.get_filter(100, 50), "showfreqs=s=100x50:mode=bar:colors=0xFFFFFF@0.9:fscale=log, format=rgba, boxblur=2:2");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showfreqs=s=100x50:mode=bar:colors=0xFFFFFF@0.9:fscale=log, format=rgba, boxblur=2:2"
+        );
     }
 
     #[test]
     fn test_get_filter_voice_shadow() {
         let style = WaveformStyle::VoiceShadow;
-        assert_eq!(style.get_filter(100, 50), "showwaves=s=100x50:mode=cline:colors=white@0.3:draw=full");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showwaves=s=100x50:mode=cline:colors=white@0.3:draw=full"
+        );
     }
 
     #[test]
     fn test_get_filter_spectrum_circle() {
         let style = WaveformStyle::SpectrumCircle;
-        assert_eq!(style.get_filter(100, 50), "showspectrum=s=100x50:mode=combined:color=white:slide=scroll:overlap=0.9, format=rgba, polar=r=min(w\\,h)/2");
+        assert_eq!(
+            style.get_filter(100, 50),
+            "showspectrum=s=100x50:mode=combined:color=white:slide=scroll:overlap=0.9, format=rgba, polar=r=min(w\\,h)/2"
+        );
     }
 }

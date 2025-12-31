@@ -28,8 +28,8 @@ impl Template {
 
         format!(
             "[1:v]{bg_scale}[bg]; \
-             [0:a]{wave_pipe}[wave_out]; \
-             [bg][wave_out]overlay=x={wx}:y={wy}:shortest=1[v1]; \
+             [0:a]{wave_pipe}[wave]; \
+             [bg][wave]overlay={wx}:{wy}[v1]; \
              {title_and_subtitle}",
             bg_scale = bg_scale,
             wave_pipe = wave_pipe,

@@ -20,6 +20,16 @@ use log::{debug, error};
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
+    // Configurar el nivel de log antes de inicializar el logger
+    let log_level = if args.debug {
+        log::LevelFilter::Debug
+    } else {
+        log::LevelFilter::Info // O el nivel que prefieras por defecto
+    };
+
+    env_logger::Builder::new()
+        .filter_level(log_level)
+        .init();
     let config_path = if args.config.is_empty() {
         None
     } else {
@@ -61,28 +71,26 @@ async fn main() -> Result<(), Box<dyn Error>> {
             .progress_chars("#>-"),
     );
 
-    // --- Lanzamiento de FFmpeg ---
-    let mut child = Command::new("ffmpeg")
+    let mut ffmpeg_cmd = Command::new("ffmpeg");
+    ffmpeg_cmd
         .arg("-y")
-        .arg("-i")
-        .arg(&args.input)
-        .arg("-i")
-        .arg(&background)
-        .arg("-filter_complex")
-        .arg(filter)
-        .arg("-map")
-        .arg("[outv]")
-        .arg("-map")
-        .arg("0:a")
-        .arg("-c:v")
-        .arg("libx264")
-        .arg("-preset")
-        .arg("veryfast")
-        .arg("-c:a")
-        .arg("copy")
+        .arg("-i").arg(&args.input)
+        .arg("-i").arg(&background)
+        .arg("-filter_complex").arg(filter)
+        .arg("-map").arg("[outv]")
+        .arg("-map").arg("0:a")
+        .arg("-c:v").arg("libx264")
+        .arg("-preset").arg("veryfast")
+        .arg("-crf").arg("18")
+        .arg("-c:a").arg("aac")        // CAMBIO: Usar aac en lugar de copy
+        .arg("-b:a").arg("192k")       // Asegurar calidad de audio
         .arg(&output_file)
-        .stderr(Stdio::piped()) // Importante: capturamos stderr
-        .spawn()?;
+        .stderr(Stdio::piped());
+
+    // Imprimir el comando generado como debug antes de spawn
+    debug!("🚀 Ejecutando comando: {:?}", ffmpeg_cmd);
+
+    let mut child = ffmpeg_cmd.spawn()?;
 
     let stderr = child
         .stderr
