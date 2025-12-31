@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 clap = { version = "4.5.53", features = ["derive"] }
+directories = "6.0.0"
 id3 = "1.16.3"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_yaml = "0.9.34"
