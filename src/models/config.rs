@@ -3,6 +3,7 @@ use directories::ProjectDirs;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::{env, path::PathBuf, fs};
+use log::debug;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -13,6 +14,7 @@ const DEFAULT_YAML: &str = include_str!("../../assets/default_config.yml");
 
 impl Config {
     pub async fn load(path: Option<String>) -> Result<Self, Box<dyn std::error::Error>> {
+        debug!("Cargando configuración...");
         let config_path = match path {
             Some(p) => {
                 let pb = PathBuf::from(p);
@@ -48,7 +50,7 @@ impl Config {
         if !config_path.exists() {
             fs::create_dir_all(config_dir)?;
             fs::write(&config_path, DEFAULT_YAML)?;
-            println!("✨ Configuración no encontrada. Se ha creado una por defecto en: {:?}", config_path);
+            debug!("✨ Configuración no encontrada. Se ha creado una por defecto en: {:?}", config_path);
         }
 
         Ok(config_path)

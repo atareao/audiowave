@@ -15,6 +15,7 @@ use std::{
     process::Stdio,
     collections::VecDeque
 };
+use log::{debug, error};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -30,7 +31,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .get(&args.template)
         .ok_or_else(|| format!("Plantilla '{}' no encontrada", args.template))?;
 
-    println!("🔍 Analizando archivo y metadatos...");
+    debug!("🔍 Analizando archivo y metadatos...");
     let meta = AudioMetadata::new(args.input.clone()).await;
 
     let title = args.title.clone().unwrap_or(meta.title);
@@ -97,7 +98,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Búfer para guardar las últimas 15 líneas de log en caso de error
     let mut error_logs: VecDeque<String> = VecDeque::with_capacity(15);
 
-    println!("🎬 Renderizando: {}...", title);
+    debug!("🎬 Renderizando: {}...", title);
 
     // Bucle asíncrono para leer el progreso
     while let Ok(Some(line)) = reader.next_line().await {
@@ -135,15 +136,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     if status.success() {
         pb.finish_with_message("¡Completado!");
-        println!("✅ Video guardado en: {}", args.output);
+        debug!("✅ Video guardado en: {}", args.output);
     } else {
         pb.abandon();
-        eprintln!("\n❌ FFmpeg falló catastróficamente.");
-        eprintln!("--- ÚLTIMOS LOGS DE ERROR ---");
+        error!("\n❌ FFmpeg falló catastróficamente.");
+        error!("--- ÚLTIMOS LOGS DE ERROR ---");
         for log in error_logs {
-            eprintln!("  > {}", log);
+            error!("  > {}", log);
         }
-        eprintln!("-----------------------------");
+        error!("-----------------------------");
     }
 
     Ok(())
