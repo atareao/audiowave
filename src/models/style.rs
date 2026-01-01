@@ -55,6 +55,8 @@ pub enum WaveformStyle {
     Equalizer32Bands,
     /// Una onda de sonido en forma circular.
     CircularWave,
+    /// Una línea suave y continua, con un ligero desenfoque.
+    SmoothLine,
 }
 
 impl WaveformStyle {
@@ -268,9 +270,9 @@ impl WaveformStyle {
             Self::Equalizer32Bands => {
                 let color = color.unwrap_or("#ffffff");
                 let freqs = [
-                    20, 25, 31, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 
-                    800, 1000, 1250, 1500, 2000, 2500, 3150, 4000, 5000, 6300, 8000, 12000, 
-                    16000, 20000, 22000, 22050
+                    20, 25, 31, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800,
+                    1000, 1250, 1500, 2000, 2500, 3150, 4000, 5000, 6300, 8000, 12000, 16000,
+                    20000, 22000, 22050,
                 ];
 
                 let mut filter = String::new();
@@ -284,7 +286,7 @@ impl WaveformStyle {
 
                 // 2. Definir dimensiones proporcionales
                 // 32 barras + 33 huecos = 65 unidades de ancho
-                let bar_w = width / 65; 
+                let bar_w = width / 65;
                 let gap_w = bar_w / 2; // Hueco más fino para resaltar las barras
 
                 // 3. Generar cada banda (creciendo desde abajo)
@@ -299,7 +301,10 @@ impl WaveformStyle {
                 // 4. Crear los GAPs (espacios negros) con el rate configurado
                 filter.push_str(&format!(
                     "color=s={}x{}:c=black:r={},split={}",
-                    gap_w, height, actual_rate, freqs.len() + 1
+                    gap_w,
+                    height,
+                    actual_rate,
+                    freqs.len() + 1
                 ));
                 for i in 1..=freqs.len() + 1 {
                     filter.push_str(&format!("[G{:02}]", i));
@@ -317,7 +322,7 @@ impl WaveformStyle {
                 filter.push_str(&format!(
                     "{}hstack=inputs={}[BARS]; \
                      [BARS]format=rgba,colorkey=0x000000:0.1:0.1",
-                    hstack_inputs, 
+                    hstack_inputs,
                     freqs.len() * 2 + 1
                 ));
 
@@ -327,7 +332,23 @@ impl WaveformStyle {
             Self::CircularWave => {
                 let color = color.unwrap_or("white");
                 format!(
-                    "showwaves=s={width}x{height}:mode=cline:colors={color}:draw=full:rate={actual_rate},geq='p(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2))':a='alpha(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2))'"
+                    "showwaves=s={w}x{h}:mode=cline:colors={c}:draw=full:rate={r},format=rgba,split[fill][border]; \
+         [fill]colorchannelmixer=aa=0.3[fill_t]; \
+         [fill_t][border]overlay=format=auto, \
+         geq='p(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2))':\
+         a='if(eq(alpha(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2)),0),0, \
+            if(p(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2)),255,0))', \
+         colorkey=0x000000:0.1:0.1",
+                    w = width,
+                    h = height,
+                    c = color,
+                    r = actual_rate
+                )
+            }
+            Self::SmoothLine => {
+                let color = color.unwrap_or("white");
+                format!(
+                    "showwaves=s={width}x{height}:mode=line:colors={color}:rate={actual_rate},format=rgba,colorkey=0x000000:0.1:0.1,boxblur=1"
                 )
             }
         }
@@ -579,7 +600,16 @@ mod tests {
         let style = WaveformStyle::CircularWave;
         assert_eq!(
             style.get_filter(100, 50, None, None),
-            "showwaves=s=100x50:mode=cline:colors=white:draw=full:rate=60,geq='p(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2))':a='alpha(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2))',format=rgba,colorkey=0x000000:0.1:0.1"
+            "showwaves=s=100x50:mode=cline:colors=white:draw=full:rate=60,format=rgba,split[fill][border]; [fill]colorchannelmixer=aa=0.3[fill_t]; [fill_t][border]overlay=format=auto, geq='p(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2))':a='if(eq(alpha(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2)),0),0, if(p(mod(W/PI*(PI+atan2(H/2-Y,X-W/2)),W), H-2*hypot(H/2-Y,X-W/2)),255,0))', colorkey=0x000000:0.1:0.1"
+        );
+    }
+
+    #[test]
+    fn test_get_filter_smooth_line() {
+        let style = WaveformStyle::SmoothLine;
+        assert_eq!(
+            style.get_filter(100, 50, None, None),
+            "showwaves=s=100x50:mode=line:colors=white:rate=60,format=rgba,colorkey=0x000000:0.1:0.1,boxblur=1"
         );
     }
 }

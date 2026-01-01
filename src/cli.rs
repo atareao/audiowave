@@ -23,8 +23,8 @@ pub struct Args {
     #[arg(long)]
     pub wave_color: Option<String>,
 
-    /// Archivo de salida (MP4)
-    #[arg(short, long, default_value = "output.mp4")]
+    /// Archivo de salida (mkv)
+    #[arg(short, long, default_value = "output.mkv")]
     pub output: String,
 
     /// Archivo de configuración YAML

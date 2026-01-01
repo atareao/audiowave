@@ -11,7 +11,7 @@ templates:
       height: 250
       x: "(W-w)/2"
       y: "H-h-150"
-      style: "glow_wave_modern" 
+      style: "smooth_line" 
     title:
       font: "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf"
       size: 80

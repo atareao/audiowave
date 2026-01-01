@@ -51,11 +51,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let title = args.title.clone().unwrap_or(meta.title);
     let subtitle = args.subtitle.clone().unwrap_or(meta.artist);
 
-    let output_file = if args.output == "output.mp4" || args.output.is_empty() {
+    let output_file = if args.output == "output.mkv" || args.output.is_empty() {
         let safe_title = title.to_lowercase()
             .replace(|c: char| !c.is_alphanumeric(), "_")
             .replace("__", "_");
-        format!("{}.mp4", safe_title.trim_matches('_'))
+        format!("{}.mkv", safe_title.trim_matches('_'))
     } else {
         args.output.clone()
     };

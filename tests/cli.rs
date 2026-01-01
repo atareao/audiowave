@@ -55,7 +55,7 @@ fn test_cli_basic_generation() -> Result<(), Box<dyn std::error::Error>> {
     writeln!(file, "      height: 300")?;
     writeln!(file, "      x: '100'")?;
     writeln!(file, "      y: '200'")?;
-    writeln!(file, "      style: classic_line")?;
+    writeln!(file, "      style: smooth_line")?;
     writeln!(file, "    title:")?;
     writeln!(file, "      font: 'Arial'")?;
     writeln!(file, "      size: 64")?;
