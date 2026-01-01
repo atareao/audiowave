@@ -19,6 +19,10 @@ pub struct Args {
     #[arg(short, long)]
     pub subtitle: Option<String>,
 
+    /// Color de la onda (ej. 'red', '#FF0000', '0xFF0000')
+    #[arg(long)]
+    pub wave_color: Option<String>,
+
     /// Archivo de salida (MP4)
     #[arg(short, long, default_value = "output.mp4")]
     pub output: String,

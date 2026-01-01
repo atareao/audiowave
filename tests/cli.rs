@@ -4,7 +4,7 @@ use std::process::Command;
 use tempfile::tempdir;
 use std::fs::File;
 use std::io::Write;
-use assert_cmd::cargo::cargo_bin;
+use assert_cmd::cargo;
 
 #[test]
 fn test_cli_basic_generation() -> Result<(), Box<dyn std::error::Error>> {
@@ -70,7 +70,7 @@ fn test_cli_basic_generation() -> Result<(), Box<dyn std::error::Error>> {
     writeln!(file, "      y: '600'")?;
 
 
-    let mut cmd = Command::new(cargo_bin("audiowave"));
+    let mut cmd = Command::new(cargo::cargo_bin!("audiowave"));
     cmd.arg("-i")
         .arg(&audio_path)
         .arg("-o")
@@ -80,7 +80,7 @@ fn test_cli_basic_generation() -> Result<(), Box<dyn std::error::Error>> {
 
     cmd.assert()
         .success()
-        .stdout(predicate::str::contains("Video guardado en:"));
+        .stderr(predicate::str::contains("Video guardado en:"));
 
     assert!(output_path.exists());
 

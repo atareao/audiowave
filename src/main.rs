@@ -15,7 +15,7 @@ use std::{
     process::Stdio,
     collections::VecDeque
 };
-use log::{debug, error};
+use log::{debug, error, info};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -36,10 +36,14 @@ async fn main() -> Result<(), Box<dyn Error>> {
         Some(args.config.clone())
     };
     let config = Config::load(config_path).await?;
-    let template = config
+    let mut template = config
         .templates
         .get(&args.template)
-        .ok_or_else(|| format!("Plantilla '{}' no encontrada", args.template))?;
+        .ok_or_else(|| format!("Plantilla '{}' no encontrada", args.template))?
+        .clone();
+    if let Some(color) = args.wave_color {
+        template.waveform.color = Some(color);
+    }
 
     debug!("🔍 Analizando archivo y metadatos...");
     let meta = AudioMetadata::new(args.input.clone()).await;
@@ -74,11 +78,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut ffmpeg_cmd = Command::new("ffmpeg");
     ffmpeg_cmd
         .arg("-y")
-        .arg("-i").arg(&args.input)
+        .arg("-progress").arg("pipe:2")
+        .arg("-v").arg("info")
+        .arg("-loop").arg("1")
         .arg("-i").arg(&background)
+        .arg("-i").arg(&args.input)
         .arg("-filter_complex").arg(filter)
         .arg("-map").arg("[outv]")
-        .arg("-map").arg("0:a")
+        .arg("-map").arg("1:a")
+        .arg("-r").arg("60")
         .arg("-c:v").arg("libx264")
         .arg("-preset").arg("slow")
         .arg("-crf").arg("18")
@@ -111,6 +119,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Bucle asíncrono para leer el progreso
     while let Ok(Some(line)) = reader.next_line().await {
         // Guardar línea en el búfer de logs (mantiene las últimas 15)
+        debug!("Log FFmpeg: {}", line);
         if error_logs.len() >= 15 {
             error_logs.pop_front();
         }
@@ -123,6 +132,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             let m: f64 = caps[2].parse()?;
             let s: f64 = caps[3].parse()?;
             total_seconds = h * 3600.0 + m * 60.0 + s;
+            debug!("⏱ Duración total: {} segundos", total_seconds);
         }
 
         // 2. Capturar el tiempo actual de renderizado
@@ -136,6 +146,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
             let percent = (current_seconds / total_seconds * 100.0) as u64;
             pb.set_position(percent);
+            debug!("Progreso: {}%", percent);
         }
     }
 
@@ -144,7 +155,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     if status.success() {
         pb.finish_with_message("¡Completado!");
-        debug!("✅ Video guardado en: {}", args.output);
+        info!("✅ Video guardado en: {}", output_file);
     } else {
         pb.abandon();
         error!("\n❌ FFmpeg falló catastróficamente.");
