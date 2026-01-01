@@ -118,6 +118,39 @@ cargo run -- -i /path/to/your/audio.mp3 -o my_waveform_video.mp4 --title "My Awe
 ### Retro Step
 ![Retro Step](waveforms/retro_step.png)
 
+### Cyberpunk Spectrum
+*Image not available due to a generation error.*
+
+### Nebula Histogram
+*Image not available due to a generation error.*
+
+### Glass Blur
+*Image not available due to a generation error.*
+
+### Cyber Circle
+*Image not available due to a generation error.*
+
+### Electric Storm
+*Image not available due to a generation error.*
+
+### Zenith Stack
+*Image not available due to a generation error.*
+
+### Pulse Radar
+*Image not available due to a generation error.*
+
+### Spectrum Circle
+*Image not available due to a generation error.*
+
+### Glow Wave Modern
+*Image not available due to a generation error.*
+
+### Equalizer 32 Bands
+*Image not available due to a generation error.*
+
+### Circular Wave
+*Image not available due to a generation error.*
+
 ---
 
 ## License

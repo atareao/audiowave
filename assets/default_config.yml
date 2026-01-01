@@ -3,14 +3,15 @@ templates:
     video:
       width: 1920
       height: 1080
-      fps: 30
-
+    background:
+      path: ""
+      mode: fit
     waveform:
       width: 1200
       height: 250
       x: "(W-w)/2"
       y: "H-h-150"
-      style: "neon_mirror" 
+      style: "glow_wave_modern" 
     title:
       font: "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf"
       size: 80

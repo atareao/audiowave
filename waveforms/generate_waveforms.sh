@@ -40,7 +40,9 @@ STYLES=(
     "audiogram_bars"
     "voice_shadow"
     # "spectrum_circle" # FFmpeg filter error: 'polar' not found
-    # "glow_wave_modern" # FFmpeg error: background.jpg not found
+    "glow_wave_modern" # FFmpeg error: background.jpg not found
+    "equalizer32_bands"
+    "circular_wave"
 )
 
 # Construct the default config YAML with a dummy background
@@ -88,6 +90,8 @@ for STYLE in "${STYLES[@]}"; do
         --input temp/sample.wav \
         --output "$OUTPUT_VIDEO" \
         --config "$TEMP_CONFIG_FILE" \
+        --title "AudioWave" \
+        --subtitle "${STYLE^^}" \
         --preview # Suppress audiowave output for cleaner logs
 
     echo "3. Check if video generation was successful"
