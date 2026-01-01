@@ -54,6 +54,7 @@ Options:
   -t, --template <TEMPLATE>    Name of the template defined in the YAML [default: default]
   -m, --title <TITLE>          Video title (overwrites metadata or YAML)
   -s, --subtitle <SUBTITLE>    Video subtitle
+      --wave-color <WAVE_COLOR> Waveform color (e.g., 'red', '#FF0000', '0xFF0000')
   -o, --output <OUTPUT>        Output MP4 file [default: output.mp4]
   -c, --config <CONFIG>        YAML configuration file
       --preview                Preview mode: generates only the first 5 seconds
@@ -73,25 +74,52 @@ cargo run -- -i /path/to/your/audio.mp3 -o my_waveform_video.mp4 --title "My Awe
 ## Waveform Styles
 
 ### Classic Line
-![Classic Line](assets/waveforms/classic_line.png)
+![Classic Line](waveforms/classic_line.png)
 
 ### Studio Bars
-![Studio Bars](assets/waveforms/studio_bars.png)
+![Studio Bars](waveforms/studio_bars.png)
 
 ### Minimal Mono
-![Minimal Mono](assets/waveforms/minimal_mono.png)
+![Minimal Mono](waveforms/minimal_mono.png)
 
 ### Waveform Solid
-![Waveform Solid](assets/waveforms/waveform_solid.png)
+![Waveform Solid](waveforms/waveform_solid.png)
 
 ### Broadcast Point
-![Broadcast Point](assets/waveforms/broadcast_point.png)
+![Broadcast Point](waveforms/broadcast_point.png)
 
 ### Talk Flow
-![Talk Flow](assets/waveforms/talk_flow.png)
+![Talk Flow](waveforms/talk_flow.png)
 
 ### Audiogram Bars
-![Audiogram Bars](assets/waveforms/audiogram_bars.png)
+![Audiogram Bars](waveforms/audiogram_bars.png)
 
 ### Voice Shadow
-![Voice Shadow](assets/waveforms/voice_shadow.png)
+![Voice Shadow](waveforms/voice_shadow.png)
+
+### Analog Oscilloscope
+![Analog Oscilloscope](waveforms/analog_oscilloscope.png)
+
+### Digital Pulse
+![Digital Pulse](waveforms/digital_pulse.png)
+
+### Ghost Frequency
+![Ghost Frequency](waveforms/ghost_frequency.png)
+
+### Liquid Gold
+![Liquid Gold](waveforms/liquid_gold.png)
+
+### Neon Mirror
+![Neon Mirror](waveforms/neon_mirror.png)
+
+### Prism Frequency
+![Prism Frequency](waveforms/prism_frequency.png)
+
+### Retro Step
+![Retro Step](waveforms/retro_step.png)
+
+---
+
+## License
+This project is licensed under the [MIT License](LICENSE).
+
