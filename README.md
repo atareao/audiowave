@@ -143,13 +143,13 @@ cargo run -- -i /path/to/your/audio.mp3 -o my_waveform_video.mp4 --title "My Awe
 *Image not available due to a generation error.*
 
 ### Glow Wave Modern
-*Image not available due to a generation error.*
+![Glow Wave Modern](waveforms/glow_wave_modern.png)
 
 ### Equalizer 32 Bands
-*Image not available due to a generation error.*
+![Equalizer 32 Bands](waveforms/equalizer32_bands.png)
 
 ### Circular Wave
-*Image not available due to a generation error.*
+![Circular Wave](waveforms/circular_wave.png)
 
 ---
 
