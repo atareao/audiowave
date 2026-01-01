@@ -4,9 +4,7 @@ templates:
       width: 1920
       height: 1080
       fps: 30
-    background:
-      path: "background.jpg"
-      mode: "fill"
+
     waveform:
       width: 1200
       height: 250

@@ -68,8 +68,30 @@ Options:
 cargo run -- -i /path/to/your/audio.mp3 -o my_waveform_video.mp4 --title "My Awesome Podcast" --subtitle "Episode 1"
 ```
 
-To use a custom configuration file:
+---
 
-```bash
-cargo run -- -i /path/to/your/audio.mp3 -c /path/to/your/config.yml -t my_custom_template
-```
+## Waveform Styles
+
+### Classic Line
+![Classic Line](assets/waveforms/classic_line.png)
+
+### Studio Bars
+![Studio Bars](assets/waveforms/studio_bars.png)
+
+### Minimal Mono
+![Minimal Mono](assets/waveforms/minimal_mono.png)
+
+### Waveform Solid
+![Waveform Solid](assets/waveforms/waveform_solid.png)
+
+### Broadcast Point
+![Broadcast Point](assets/waveforms/broadcast_point.png)
+
+### Talk Flow
+![Talk Flow](assets/waveforms/talk_flow.png)
+
+### Audiogram Bars
+![Audiogram Bars](assets/waveforms/audiogram_bars.png)
+
+### Voice Shadow
+![Voice Shadow](assets/waveforms/voice_shadow.png)

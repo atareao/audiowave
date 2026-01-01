@@ -45,7 +45,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         template.waveform.color = Some(color);
     }
 
-    debug!("🔍 Analizando archivo y metadatos...");
+    println!("🔍 Analizando archivo y metadatos...");
     let meta = AudioMetadata::new(args.input.clone()).await;
 
     let title = args.title.clone().unwrap_or(meta.title);
@@ -114,7 +114,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // Búfer para guardar las últimas 15 líneas de log en caso de error
     let mut error_logs: VecDeque<String> = VecDeque::with_capacity(15);
 
-    debug!("🎬 Renderizando: {}...", title);
+    println!("🎬 Renderizando: {}...", title);
 
     // Bucle asíncrono para leer el progreso
     while let Ok(Some(line)) = reader.next_line().await {
