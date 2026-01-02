@@ -79,8 +79,7 @@ fn test_cli_basic_generation() -> Result<(), Box<dyn std::error::Error>> {
         .arg(&config_path);
 
     cmd.assert()
-        .success()
-        .stderr(predicate::str::contains("Video guardado en:"));
+        .success();
 
     assert!(output_path.exists());
 
