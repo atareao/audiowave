@@ -18,20 +18,20 @@ fi
 # Problematic styles commented out due to FFmpeg filter issues or missing options
 STYLES=(
     "classic_line"
-    # "cyberpunk_spectrum" # FFmpeg filter error: option 'rate' not found
+    "cyberpunk_spectrum" # FFmpeg filter error: option 'rate' not found
     "analog_oscilloscope"
     "retro_step" # FFmpeg error: background.jpg not found
-    # "nebula_histogram" # FFmpeg filter error: option 'color' not found
+    "nebula_histogram" # FFmpeg filter error: option 'color' not found
     "prism_frequency" # FFmpeg error: background.jpg not found
     "digital_pulse" # FFmpeg error: background.jpg not found
     "neon_mirror" # FFmpeg error: background.jpg not found
     "glass_blur" # FFmpeg error: background.jpg not found
     "ghost_frequency" # FFmpeg error: background.jpg not found
-    # "cyber_circle" # FFmpeg filter error: 'polar' not found
+    "cyber_circle" # FFmpeg filter error: 'polar' not found
     "liquid_gold" # FFmpeg error: background.jpg not found
-    # "electric_storm" # FFmpeg filter error: 'showpeaks' not found
-    # "zenith_stack" # FFmpeg filter error: option 'rate' not found
-    # "pulse_radar" # FFmpeg filter error: 'polar' not found
+    "electric_storm" # FFmpeg filter error: 'showpeaks' not found
+    "zenith_stack" # FFmpeg filter error: option 'rate' not found
+    "pulse_radar" # FFmpeg filter error: 'polar' not found
     "studio_bars"
     "minimal_mono"
     "waveform_solid"
@@ -39,10 +39,21 @@ STYLES=(
     "talk_flow"
     "audiogram_bars"
     "voice_shadow"
-    # "spectrum_circle" # FFmpeg filter error: 'polar' not found
+    "spectrum_circle" # FFmpeg filter error: 'polar' not found
     "glow_wave_modern" # FFmpeg error: background.jpg not found
     "equalizer32_bands"
+    "equalizer128_bands"
+    "equalizer10_bands"
     "circular_wave"
+    "smooth_line"
+    "professional_neon"
+    "cyber_reflex"
+    "magma_vortex"
+    "interstellar"
+    "vapor_wave_mirror"
+    "cyber_ghost"
+    "toxic_pulse"
+    "circular_nebula"
 )
 
 # Construct the default config YAML with a dummy background

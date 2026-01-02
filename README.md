@@ -73,83 +73,114 @@ cargo run -- -i /path/to/your/audio.mp3 -o my_waveform_video.mp4 --title "My Awe
 
 ## Waveform Styles
 
-### Classic Line
-![Classic Line](waveforms/classic_line.png)
+### Analog oscilloscope
 
-### Studio Bars
-![Studio Bars](waveforms/studio_bars.png)
+![waveforms/analog_oscilloscope.png](waveforms/analog_oscilloscope.png)
 
-### Minimal Mono
-![Minimal Mono](waveforms/minimal_mono.png)
+### Audiogram bars
 
-### Waveform Solid
-![Waveform Solid](waveforms/waveform_solid.png)
+![waveforms/audiogram_bars.png](waveforms/audiogram_bars.png)
 
-### Broadcast Point
-![Broadcast Point](waveforms/broadcast_point.png)
+### Broadcast point
 
-### Talk Flow
-![Talk Flow](waveforms/talk_flow.png)
+![waveforms/broadcast_point.png](waveforms/broadcast_point.png)
 
-### Audiogram Bars
-![Audiogram Bars](waveforms/audiogram_bars.png)
+### Circular nebula
 
-### Voice Shadow
-![Voice Shadow](waveforms/voice_shadow.png)
+![waveforms/circular_nebula.png](waveforms/circular_nebula.png)
 
-### Analog Oscilloscope
-![Analog Oscilloscope](waveforms/analog_oscilloscope.png)
+### Circular wave
 
-### Digital Pulse
-![Digital Pulse](waveforms/digital_pulse.png)
+![waveforms/circular_wave.png](waveforms/circular_wave.png)
 
-### Ghost Frequency
-![Ghost Frequency](waveforms/ghost_frequency.png)
+### Classic line
 
-### Liquid Gold
-![Liquid Gold](waveforms/liquid_gold.png)
+![waveforms/classic_line.png](waveforms/classic_line.png)
 
-### Neon Mirror
-![Neon Mirror](waveforms/neon_mirror.png)
+### Cyber ghost
 
-### Prism Frequency
-![Prism Frequency](waveforms/prism_frequency.png)
+![waveforms/cyber_ghost.png](waveforms/cyber_ghost.png)
 
-### Retro Step
-![Retro Step](waveforms/retro_step.png)
+### Cyber reflex
 
-### Cyberpunk Spectrum
-*Image not available due to a generation error.*
+![waveforms/cyber_reflex.png](waveforms/cyber_reflex.png)
 
-### Nebula Histogram
-*Image not available due to a generation error.*
+### Digital pulse
 
-### Glass Blur
-*Image not available due to a generation error.*
+![waveforms/digital_pulse.png](waveforms/digital_pulse.png)
 
-### Cyber Circle
-*Image not available due to a generation error.*
+### Equalizer10 bands
 
-### Electric Storm
-*Image not available due to a generation error.*
+![waveforms/equalizer10_bands.png](waveforms/equalizer10_bands.png)
 
-### Zenith Stack
-*Image not available due to a generation error.*
+### Equalizer128 bands
 
-### Pulse Radar
-*Image not available due to a generation error.*
+![waveforms/equalizer128_bands.png](waveforms/equalizer128_bands.png)
 
-### Spectrum Circle
-*Image not available due to a generation error.*
+### Equalizer32 bands
 
-### Glow Wave Modern
-![Glow Wave Modern](waveforms/glow_wave_modern.png)
+![waveforms/equalizer32_bands.png](waveforms/equalizer32_bands.png)
 
-### Equalizer 32 Bands
-![Equalizer 32 Bands](waveforms/equalizer32_bands.png)
+### Ghost frequency
 
-### Circular Wave
-![Circular Wave](waveforms/circular_wave.png)
+![waveforms/ghost_frequency.png](waveforms/ghost_frequency.png)
+
+### Glow wave modern
+
+![waveforms/glow_wave_modern.png](waveforms/glow_wave_modern.png)
+
+### Liquid gold
+
+![waveforms/liquid_gold.png](waveforms/liquid_gold.png)
+
+### Minimal mono
+
+![waveforms/minimal_mono.png](waveforms/minimal_mono.png)
+
+### Neon mirror
+
+![waveforms/neon_mirror.png](waveforms/neon_mirror.png)
+
+### Prism frequency
+
+![waveforms/prism_frequency.png](waveforms/prism_frequency.png)
+
+### Professional neon
+
+![waveforms/professional_neon.png](waveforms/professional_neon.png)
+
+### Retro step
+
+![waveforms/retro_step.png](waveforms/retro_step.png)
+
+### Smooth line
+
+![waveforms/smooth_line.png](waveforms/smooth_line.png)
+
+### Studio bars
+
+![waveforms/studio_bars.png](waveforms/studio_bars.png)
+
+### Talk flow
+
+![waveforms/talk_flow.png](waveforms/talk_flow.png)
+
+### Toxic pulse
+
+![waveforms/toxic_pulse.png](waveforms/toxic_pulse.png)
+
+### Vapor wave mirror
+
+![waveforms/vapor_wave_mirror.png](waveforms/vapor_wave_mirror.png)
+
+### Voice shadow
+
+![waveforms/voice_shadow.png](waveforms/voice_shadow.png)
+
+### Waveform solid
+
+![waveforms/waveform_solid.png](waveforms/waveform_solid.png)
+
 
 ---
 
