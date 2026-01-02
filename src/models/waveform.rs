@@ -9,14 +9,15 @@ pub struct WaveformSettings {
     pub y: String,
     pub style: Option<WaveformStyle>,
     pub color: Option<String>,
+    pub rate: Option<i32>,
     pub pipeline: Option<Vec<String>>,
 }
 
 impl WaveformSettings {
-    pub fn to_filter_chain(&self, rate: Option<i32>) -> String {
+    pub fn to_filter_chain(&self) -> String {
         // 1. Obtenemos el filtro base (del estilo o del primer paso del pipeline)
         let base_filter = if let Some(style) = &self.style {
-            style.get_filter(self.width, self.height, self.color.as_deref(), rate)
+            style.get_filter(self.width, self.height, self.color.as_deref(), self.rate)
         } else {
             // Si no hay estilo, asumimos que el primer filtro del pipeline usa {w} y {h}
             let first = self
@@ -26,7 +27,7 @@ impl WaveformSettings {
                 .cloned()
                 .unwrap_or_else(|| "showwaves=s={w}x{h}:rate={r}".to_string());
 
-            let actual_rate = rate.unwrap_or(60);
+            let actual_rate = self.rate.unwrap_or(60);
             let mut replaced = first
                 .replace("{w}", &self.width.to_string())
                 .replace("{h}", &self.height.to_string());
@@ -69,10 +70,11 @@ mod tests {
             y: "200".to_string(),
             style: Some(WaveformStyle::ClassicLine),
             color: None,
+            rate: None,
             pipeline: None,
         };
         let expected = "showwaves=s=800x300:mode=line:colors=cyan:rate=60,format=rgba,colorkey=0x000000:0.1:0.1";
-        assert_eq!(settings.to_filter_chain(None), expected);
+        assert_eq!(settings.to_filter_chain(), expected);
     }
     #[test]
     fn test_to_filter_chain_with_style_and_color() {
@@ -83,10 +85,11 @@ mod tests {
             y: "200".to_string(),
             style: Some(WaveformStyle::ClassicLine),
             color: Some("red".to_string()),
+            rate: None,
             pipeline: None,
         };
         let expected = "showwaves=s=800x300:mode=line:colors=red:rate=60,format=rgba,colorkey=0x000000:0.1:0.1";
-        assert_eq!(settings.to_filter_chain(None), expected);
+        assert_eq!(settings.to_filter_chain(), expected);
     }
     #[test]
     fn test_to_filter_chain_with_style_and_pipeline() {
@@ -97,13 +100,14 @@ mod tests {
             y: "200".to_string(),
             style: Some(WaveformStyle::ClassicLine),
             color: None,
+            rate: None,
             pipeline: Some(vec![
                 "aformat=channel_layouts=mono".to_string(),
                 "compand".to_string(),
             ]),
         };
         let expected = "showwaves=s=800x300:mode=line:colors=cyan:rate=60,format=rgba,colorkey=0x000000:0.1:0.1,aformat=channel_layouts=mono,compand";
-        assert_eq!(settings.to_filter_chain(None), expected);
+        assert_eq!(settings.to_filter_chain(), expected);
     }
     #[test]
     fn test_to_filter_chain_with_pipeline_only() {
@@ -114,13 +118,14 @@ mod tests {
             y: "200".to_string(),
             style: None,
             color: None,
+            rate: None,
             pipeline: Some(vec![
                 "showwaves=s={w}x{h}:colors=red".to_string(),
                 "compand".to_string(),
             ]),
         };
         let expected = "showwaves=s=800x300:colors=red,compand";
-        assert_eq!(settings.to_filter_chain(None), expected);
+        assert_eq!(settings.to_filter_chain(), expected);
     }
     #[test]
     fn test_to_filter_chain_with_pipeline_and_color() {
@@ -131,13 +136,14 @@ mod tests {
             y: "200".to_string(),
             style: None,
             color: Some("blue".to_string()),
+            rate: None,
             pipeline: Some(vec![
                 "showwaves=s={w}x{h}:colors={c}".to_string(),
                 "compand".to_string(),
             ]),
         };
         let expected = "showwaves=s=800x300:colors=blue,compand";
-        assert_eq!(settings.to_filter_chain(None), expected);
+        assert_eq!(settings.to_filter_chain(), expected);
     }
 
     #[test]
@@ -149,8 +155,9 @@ mod tests {
             y: "200".to_string(),
             style: None,
             color: None,
+            rate: None,
             pipeline: None,
         };
         let expected = "showwaves=s=800x300:rate=60";
-        assert_eq!(settings.to_filter_chain(None), expected);
+        assert_eq!(settings.to_filter_chain(), expected);
     }}

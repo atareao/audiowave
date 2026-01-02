@@ -19,6 +19,10 @@ pub struct Args {
     #[arg(short, long)]
     pub subtitle: Option<String>,
 
+    /// Rate
+    #[arg(short, long)]
+    pub rate: Option<u32>,
+
     /// Color de la onda (ej. 'red', '#FF0000', '0xFF0000')
     #[arg(long)]
     pub wave_color: Option<String>,

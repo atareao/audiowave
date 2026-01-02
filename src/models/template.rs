@@ -11,13 +11,12 @@ pub struct Template {
     pub waveform: WaveformSettings,
     pub title: Option<TextSettings>,
     pub subtitle: Option<TextSettings>,
-    pub rate: Option<i32>,
 }
 
 impl Template {
     pub fn build_filter_complex(&self, title_text: &str, subtitle_text: &str) -> String {
         let bg_scale = self.background.to_filter(self.video.width, self.video.height);
-        let wave_pipe = self.waveform.to_filter_chain(self.rate);
+        let wave_pipe = self.waveform.to_filter_chain();
         let draw_title = self.title.as_ref().map(|title| title.to_drawtext(title_text));
         let draw_subtitle = self.subtitle.as_ref().map(|subtitle| subtitle.to_drawtext(subtitle_text));
         let title_and_subtitle = match (draw_title, draw_subtitle) {
@@ -63,6 +62,7 @@ mod tests {
                 x: "100".to_string(),
                 y: "200".to_string(),
                 color: None,
+                rate: None,
                 pipeline: None,
             },
             title: Some(TextSettings {
@@ -79,7 +79,6 @@ mod tests {
                 x: "(w-text_w)/2".to_string(),
                 y: "600".to_string(),
             }),
-            rate: None,
         };
 
         let filter = template.build_filter_complex("My Title", "My Subtitle");

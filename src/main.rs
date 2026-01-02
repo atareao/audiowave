@@ -41,6 +41,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .get(&args.template)
         .ok_or_else(|| format!("Plantilla '{}' no encontrada", args.template))?
         .clone();
+
+    if let Some(rate) = args.rate {
+        template.waveform.rate = Some(rate as i32);
+    }
+
     if let Some(color) = args.wave_color {
         template.waveform.color = Some(color);
     }
@@ -86,7 +91,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .arg("-filter_complex").arg(filter)
         .arg("-map").arg("[outv]")
         .arg("-map").arg("1:a")
-        .arg("-r").arg("60")
+        .arg("-r").arg(args.rate.unwrap_or(30).to_string())
         .arg("-c:v").arg("libx264")
         .arg("-preset").arg("slow")
         .arg("-crf").arg("18")
